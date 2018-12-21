@@ -5,31 +5,26 @@
 • в иных случаях необходимо вернуть имя и ход победителя, если оба игрока походили одинаково - выигрывает первый игрок. 
 =end
 
+class WrongNumberOfPlayersError < StandardError; end 
+class NoSuchStrategyError < StandardError; end
+
 def rps_game_winner(array = [["player1", "P"], ["player2", "S"]])
     if array.size != 2
-        return 'WrongNumberOfPlayersError'    
+        raise WrongNumberOfPlayersError    
     elsif (/[PSR]/ === array[0][1]) & (/[PSR]/ === array[1][1])
         if array[0][1] == array[1][1]
-            return "player1 #{array[0][1]}"
+            return "#{array[0][0]} #{array[0][1]}"
         else
             check = array[0][1] + array[1][1]
             case check
-            when "RP"
-                return 'player2 P'
-            when "RS"
-                return 'player1 R'
-            when "PR"
-                return 'player1 P'
-            when "PS"
-                return 'player2 S'
-            when "SR"
-                return 'player2 R'
-            when "SP"
-                return 'player1 S'
+            when "RS", "PR", "SP" 
+                return "#{array[0][0]} #{array[0][1]}"
+            when "RP", "PS", "SP" 
+                return "#{array[1][0]} #{array[1][1]}"
             end
         end
     else 
-        return 'NoSuchStrategyError'        
+        raise NoSuchStrategyError  
     end
 end
 
